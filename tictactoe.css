@@ -1,0 +1,57 @@
+/*Create a grid for X/O placements*/
+
+h1 {
+    margin-left: 35%;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 100px;
+    margin-left: 500px;
+    margin-right: 500px;
+    margin-top: 60px;
+}
+
+#one {
+    border: solid;
+}
+#two {
+    border: solid;
+}
+#three {
+    border: solid;
+}
+#four {
+    border: solid;
+}
+#five {
+    border: solid;
+}
+#six {
+    border: solid;
+}
+#seven {
+    border: solid;
+}
+#eight {
+    border: solid;
+}
+#nine {
+    border: solid;
+}
+
+.players {
+    margin-top: 30px;
+    margin-left: 36%;
+}
+
+.playerDisp {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 36%;
+}
+
+#playerTwo {
+    margin-left: 140px;
+}
