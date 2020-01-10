@@ -2,7 +2,7 @@
 
 METHOD/APPROACH:
     - start with two-players then AI (player 1 always "X")
-    - gameboard as an array inside Gameboard object
+    - gameboard as an array inside gameBoard object
     - players stored in objects
     - object to control the flow of game
     - little global code as possible
@@ -12,13 +12,14 @@ METHOD/APPROACH:
     - check gameover
     - restart/clear interface
     - ambitious option: let player play against AI & make computer make the first move.
-    * overall 4 main/starting objects: Gameboard (module), players (FF), gameControl (FF).
+    * overall 4 main/starting objects: gameBoard (module), players (FF), gameControl (FF).
     * overall 2 main functions: render(), markToDOM (mark symbol and update DOM).
 
 LEARNED:
     - refresher: Module pattern - just an FF (alt. to Constructors) that can be publicized through return, but is just enclosed in
     IIFE.
     - in FF, properties are declared as functions, then returned.
+    - in if logic, make sure to separate and group logics of && and || using brackets
 
 PSEUDO: (THINK IN OBJECTS CONTEXT)
     - make grid in HTML/CSS & assign each box (child div's) with array element of gameboard - COMPLETE
@@ -26,7 +27,7 @@ PSEUDO: (THINK IN OBJECTS CONTEXT)
     - store X/O somewhere to keep track of box indices?? (STUCK)
         - other option: when three boxes are same symbols in a row/diagonal, then the player wins.
         - if all boxes have value, but nothing in a row, then draw.
-    * if a grid box is clicked, then render (innerHTML/textContent) = X or O.
+    * if a grid box is clicked, then render (innerHTML/innerHTML) = X or O.
         - make sure if X or O exists, then don't populate.
     - taking turns: inside gameplay object, use array collecting the symbols by turn/onclick; if the latest element in an array is
      “X”, then place “O” if grid box is clicked – put array inside the gameplay object.
@@ -40,6 +41,7 @@ PSEUDO: (THINK IN OBJECTS CONTEXT)
 STATUS:
     - can't get e.preventDefault() to work <- odd problem that seems to occur randomly; solved by including preventDefault() with 
     addEventListener, instead of onsubmit.
+    - modal box starts immediately on page load - fix problem with modal.
 */
 
 const Players = (name) => {
@@ -50,7 +52,7 @@ const Players = (name) => {
 
 //other option is to have two FF for each player, then assign a mark (X/O) for each.
 
-const Gameboard = (function() {
+const gameBoard = (function() {
     let box1 = document.getElementById("one");
     let box2 = document.getElementById("two");
     let box3 = document.getElementById("three");
@@ -79,16 +81,16 @@ let render = function() {   //call this function in modelDOM function.
     });
 
     let symArray = [];
-    //mark X/O onclick: (something is wrong with below code)
-    Gameboard.gameArray.map(a => {
+    //mark X/O onclick:
+    gameBoard.gameArray.map(a => {
         a.addEventListener("click", function() {
-            if (a.textContent !== 'X' || a.textContent !== 'O') {
-                if (symArray[symArray-1] == 'X') {
-                    a.innerHTML == 'O';
-                    symArray.push(a.innerHTML);
-                } else if (symArray[symArray-1] == 'O') {
-                    a.innerHTML == 'X';
-                    symArray.push(a.innerHTML);
+            if (a.innerHTML !== 'X' || a.innerHTML !== 'O') {
+                if ((symArray[symArray.length-1] == 'O' || symArray[symArray.length-1] == null) && a.innerHTML !== 'O') {
+                    a.innerHTML = 'X';
+                    symArray.push('X');
+                } else if ((symArray[symArray.length-1] == 'X' || symArray[symArray.length-1] == null) && a.innerHTML !== 'X') {
+                    a.innerHTML = 'O';
+                    symArray.push('O');
                 }
             }
         })
@@ -97,11 +99,35 @@ let render = function() {   //call this function in modelDOM function.
 
 let modelDOM = function() {
     render();
+    gameControl();
 }
 
-let Gamecontrol = function(winnerName) {
+let gameWin = (function(winnerName) {
     //call this function in modelDOM
     //put popup window including winner name.
+    const winner = winnerName + "wins!";
+    return (winner);
+})();
+
+let gameControl = function() {
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+    var content = document.getElementById("winner");
+
+    if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[1].innerHTML == 'X' && gameBoard.gameArray[2].innerHTML == 'X') {
+        const sayWinner = gameWin("Player1");
+        content.innerHTML = sayWinner;
+        modal.style.display = 'block';
+    }
+
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }
 
 modelDOM();
