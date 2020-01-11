@@ -19,19 +19,21 @@ LEARNED:
     - refresher: Module pattern - just an FF (alt. to Constructors) that can be publicized through return, but is just enclosed in
     IIFE.
     - in FF, properties are declared as functions, then returned.
-    - in if logic, make sure to separate and group logics of && and || using brackets
+    - in if logic, make sure to separate and group logics of && and || using brackets.
+    - order of which functions are declared are important.
+    - To pass arguments into Module Pattern, return function inside the Module.
 
 PSEUDO: (THINK IN OBJECTS CONTEXT)
-    - make grid in HTML/CSS & assign each box (child div's) with array element of gameboard - COMPLETE
+    - make grid in HTML/CSS & assign each box (child div's) with array element of gameboard
     - start button to enable inputs - given start button is clicked before any actions.
-    - store X/O somewhere to keep track of box indices?? (STUCK)
+    - store X/O somewhere to keep track of box indices??
         - other option: when three boxes are same symbols in a row/diagonal, then the player wins.
         - if all boxes have value, but nothing in a row, then draw.
     * if a grid box is clicked, then render (innerHTML/innerHTML) = X or O.
         - make sure if X or O exists, then don't populate.
     - taking turns: inside gameplay object, use array collecting the symbols by turn/onclick; if the latest element in an array is
      “X”, then place “O” if grid box is clicked – put array inside the gameplay object.
-    - Players as object; user can choose and select from the FF. - COMPLETE
+    - Players as object; user can choose and select from the FF.
         - if button clicked, then user2 = player or AI.
         - player name can be arg input then displayed through FF.
         - display using playerX.name.
@@ -41,7 +43,9 @@ PSEUDO: (THINK IN OBJECTS CONTEXT)
 STATUS:
     - can't get e.preventDefault() to work <- odd problem that seems to occur randomly; solved by including preventDefault() with 
     addEventListener, instead of onsubmit.
-    - modal box starts immediately on page load - fix problem with modal.
+    - modal box starts immediately on page load - fix problem with modal (CAN'T RESOLVE; JUST DISPLAY WINNER THROUGH DOM).
+        - couldn't resolve because if statement was problematic, showing shaded background upon page load.
+    - disable box click when winner determined.
 */
 
 const Players = (name) => {
@@ -82,44 +86,32 @@ let render = function() {   //call this function in modelDOM function.
 
     let symArray = [];
     //mark X/O onclick:
-    gameBoard.gameArray.map(a => {
-        a.addEventListener("click", function() {
-            if (a.innerHTML !== 'X' || a.innerHTML !== 'O') {
-                if ((symArray[symArray.length-1] == 'O' || symArray[symArray.length-1] == null) && a.innerHTML !== 'O') {
-                    a.innerHTML = 'X';
-                    symArray.push('X');
-                } else if ((symArray[symArray.length-1] == 'X' || symArray[symArray.length-1] == null) && a.innerHTML !== 'X') {
-                    a.innerHTML = 'O';
-                    symArray.push('O');
+    if (gameControl() !== "win") {
+        gameBoard.gameArray.map(a => {
+            a.addEventListener("click", function() {
+                if (a.innerHTML !== 'X' || a.innerHTML !== 'O') {
+                    if ((symArray[symArray.length-1] == 'O' || symArray[symArray.length-1] == null) && a.innerHTML !== 'O') {
+                        a.innerHTML = 'X';
+                        symArray.push('X');
+                    } else if ((symArray[symArray.length-1] == 'X' || symArray[symArray.length-1] == null) && a.innerHTML !== 'X') {
+                        a.innerHTML = 'O';
+                        symArray.push('O');
+                    }
                 }
-            }
+                gameControl();
+            })
         })
-    })
+    }
 }
 
 let modelDOM = function() {
     render();
-    gameControl();
 }
 
-let gameWin = (function(winnerName) {
-    //call this function in modelDOM
-    //put popup window including winner name.
-    const winner = winnerName + "wins!";
-    return (winner);
-})();
-
 let gameControl = function() {
-    var modal = document.getElementById("myModal");
-    var span = document.getElementsByClassName("close")[0];
-    var content = document.getElementById("winner");
-
-    if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[1].innerHTML == 'X' && gameBoard.gameArray[2].innerHTML == 'X') {
-        const sayWinner = gameWin("Player1");
-        content.innerHTML = sayWinner;
-        modal.style.display = 'block';
-    }
-
+    //var modal = document.getElementById("myModal");
+    //var span = document.getElementsByClassName("close")[0];
+    /*
     span.onclick = function() {
         modal.style.display = 'none';
     }
@@ -127,7 +119,26 @@ let gameControl = function() {
         if (event.target == modal) {
             modal.style.display = "none";
         }
+        */
+
+    //Win Conditions:
+    if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[1].innerHTML == 'X' && gameBoard.gameArray[2].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "win";
     }
+
 }
+
+let gameWin = (function() {
+    //call this function in modelDOM
+    //put popup window including winner name
+    return {winGame: function(winnerName){
+            var content = document.getElementById("winner");
+            content.innerHTML = winnerName + " Wins!";
+        }
+    }
+})();
 
 modelDOM();
