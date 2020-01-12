@@ -45,7 +45,9 @@ STATUS:
     addEventListener, instead of onsubmit.
     - modal box starts immediately on page load - fix problem with modal (CAN'T RESOLVE; JUST DISPLAY WINNER THROUGH DOM).
         - couldn't resolve because if statement was problematic, showing shaded background upon page load.
-    - disable box click when winner determined.
+    - disable box click when winner determined - COMPLETE
+    - make draw condition - COMPLETE
+    - make reset - COMPLETE
 */
 
 const Players = (name) => {
@@ -98,6 +100,16 @@ let render = function() {   //call this function in modelDOM function.
                 }
             }
             gameControl();
+        })
+    })
+
+    //reset control:
+    let reset = document.getElementById("reset");
+    reset.addEventListener("click", function() {
+        gameBoard.gameArray.map(a => {
+            a.innerHTML = "";
+            symArray = [];
+            document.getElementById("winner").innerHTML = "";
         })
     })
 }
@@ -218,6 +230,11 @@ let gameControl = function() {
         //modal.style.display = 'block';
         return "wins";
     } 
+    //draw criteria
+    if (gameBoard.gameArray.every(a => (a.innerHTML !== "" && (a.innerHTML == "X" || a.innerHTML == "O"))) == true) {
+        gameWin.drawGame();
+        return "wins";
+    }
 
 }
 
@@ -227,6 +244,10 @@ let gameWin = (function() {
     return {winGame: function(winnerName){
             var content = document.getElementById("winner");
             content.innerHTML = winnerName + " Wins!";
+        },
+        drawGame: function(drawName) {
+            var content = document.getElementById("winner");
+            content.innerHTML = "Draw";
         }
     }
 })();

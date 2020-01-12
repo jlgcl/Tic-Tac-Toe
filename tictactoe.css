@@ -99,3 +99,15 @@ h1 {
     font-family: "Times New Roman", Times, serif;
     font-weight: bold;
 }
+
+#reset {
+    margin-top: 20px;
+    margin-left: 50%;
+    border: solid;
+    border-radius: 5px;
+}
+
+#reset:hover {
+    background: black;
+    color: white;
+}
