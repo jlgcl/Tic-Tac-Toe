@@ -20,7 +20,7 @@ LEARNED:
     IIFE.
     - in FF, properties are declared as functions, then returned.
     - in if logic, make sure to separate and group logics of && and || using brackets.
-    - order of which functions are declared are important.
+    - order of which functions are declared are important if values are to be passed as arguments to suceeding function/module.
     - To pass arguments into Module Pattern, return function inside the Module.
 
 PSEUDO: (THINK IN OBJECTS CONTEXT)
@@ -86,22 +86,20 @@ let render = function() {   //call this function in modelDOM function.
 
     let symArray = [];
     //mark X/O onclick:
-    if (gameControl() !== "win") {
-        gameBoard.gameArray.map(a => {
-            a.addEventListener("click", function() {
-                if (a.innerHTML !== 'X' || a.innerHTML !== 'O') {
-                    if ((symArray[symArray.length-1] == 'O' || symArray[symArray.length-1] == null) && a.innerHTML !== 'O') {
-                        a.innerHTML = 'X';
-                        symArray.push('X');
-                    } else if ((symArray[symArray.length-1] == 'X' || symArray[symArray.length-1] == null) && a.innerHTML !== 'X') {
-                        a.innerHTML = 'O';
-                        symArray.push('O');
-                    }
+    gameBoard.gameArray.map(a => {
+        a.addEventListener("click", function() {
+            if ((a.innerHTML !== 'X' || a.innerHTML !== 'O' && gameControl() !== "win") && gameControl() !== "wins") {
+                if ((symArray[symArray.length-1] == 'O' || symArray[symArray.length-1] == null) && a.innerHTML !== 'O') {
+                    a.innerHTML = 'X';
+                    symArray.push('X');
+                } else if ((symArray[symArray.length-1] == 'X' || symArray[symArray.length-1] == null) && a.innerHTML !== 'X') {
+                    a.innerHTML = 'O';
+                    symArray.push('O');
                 }
-                gameControl();
-            })
+            }
+            gameControl();
         })
-    }
+    })
 }
 
 let modelDOM = function() {
@@ -122,12 +120,104 @@ let gameControl = function() {
         */
 
     //Win Conditions:
+    //player 1 criteria
     if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[1].innerHTML == 'X' && gameBoard.gameArray[2].innerHTML == 'X') {
         sayWinner = "Player1";
         gameWin.winGame(sayWinner);
         //modal.style.display = 'block';
-        return "win";
+        return "wins";
     }
+    if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[3].innerHTML == 'X' && gameBoard.gameArray[6].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[1].innerHTML == 'X' && gameBoard.gameArray[4].innerHTML == 'X' && gameBoard.gameArray[7].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[2].innerHTML == 'X' && gameBoard.gameArray[5].innerHTML == 'X' && gameBoard.gameArray[8].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[3].innerHTML == 'X' && gameBoard.gameArray[4].innerHTML == 'X' && gameBoard.gameArray[5].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[6].innerHTML == 'X' && gameBoard.gameArray[7].innerHTML == 'X' && gameBoard.gameArray[8].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[4].innerHTML == 'X' && gameBoard.gameArray[8].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[2].innerHTML == 'X' && gameBoard.gameArray[4].innerHTML == 'X' && gameBoard.gameArray[6].innerHTML == 'X') {
+        sayWinner = "Player1";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    } 
+    //player 2 criteria
+    if (gameBoard.gameArray[0].innerHTML == 'O' && gameBoard.gameArray[1].innerHTML == 'O' && gameBoard.gameArray[2].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[0].innerHTML == 'O' && gameBoard.gameArray[3].innerHTML == 'O' && gameBoard.gameArray[6].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[1].innerHTML == 'O' && gameBoard.gameArray[4].innerHTML == 'O' && gameBoard.gameArray[7].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[2].innerHTML == 'O' && gameBoard.gameArray[5].innerHTML == 'O' && gameBoard.gameArray[8].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[3].innerHTML == 'O' && gameBoard.gameArray[4].innerHTML == 'O' && gameBoard.gameArray[5].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[6].innerHTML == 'O' && gameBoard.gameArray[7].innerHTML == 'O' && gameBoard.gameArray[8].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[0].innerHTML == 'O' && gameBoard.gameArray[4].innerHTML == 'O' && gameBoard.gameArray[8].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    }
+    if (gameBoard.gameArray[2].innerHTML == 'O' && gameBoard.gameArray[4].innerHTML == 'O' && gameBoard.gameArray[6].innerHTML == 'O') {
+        sayWinner = "Player2";
+        gameWin.winGame(sayWinner);
+        //modal.style.display = 'block';
+        return "wins";
+    } 
 
 }
 
