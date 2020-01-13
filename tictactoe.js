@@ -48,12 +48,13 @@ STATUS:
     - disable box click when winner determined - COMPLETE
     - make draw condition - COMPLETE
     - make reset - COMPLETE
+    - make vs. AI (STUCK: when player vs AI selection is same, OR box already has content, then don't populate)
 */
 
 const Players = (name) => {
     const getName = () => name;
 
-    return {getName};
+    return {getName, selection};
 };
 
 //other option is to have two FF for each player, then assign a mark (X/O) for each.
@@ -87,16 +88,39 @@ let render = function() {   //call this function in modelDOM function.
     });
 
     let symArray = [];
+    let randArray = [];
+    let randomSelect = "";
+
     //mark X/O onclick:
     gameBoard.gameArray.map(a => {
-        a.addEventListener("click", function() {
-            if ((a.innerHTML !== 'X' || a.innerHTML !== 'O' && gameControl() !== "win") && gameControl() !== "wins") {
+        a.addEventListener("click", function(event) {
+            if ((a.innerHTML !== 'X' && a.innerHTML !== 'O') && gameControl() !== "wins") {
                 if ((symArray[symArray.length-1] == 'O' || symArray[symArray.length-1] == null) && a.innerHTML !== 'O') {
                     a.innerHTML = 'X';
                     symArray.push('X');
                 } else if ((symArray[symArray.length-1] == 'X' || symArray[symArray.length-1] == null) && a.innerHTML !== 'X') {
                     a.innerHTML = 'O';
                     symArray.push('O');
+                }
+            }
+            //AI selection (LEARNED: making else if condition for case when aiSelect == a won't do anything on AI turn):
+            /*randomSelect = Math.floor(Math.random() * gameBoard.gameArray.length);
+            let aiSelect = gameBoard.gameArray[randomSelect];
+            console.log(a);
+            console.log(aiSelect);*/
+            //aiSelect !== a; then aiSelect.innerHTML = 'symbol' inside if statement below only compares current a value, not the entire a values in the board.
+            //above code returned two simultaneous boxes to be filled with symbols: placed symbol on same boxes for AI and player & placed symbol on already occupied box.
+
+            //AI selection: KEY LESSON LEARNED: use filter method instead of above commented approach.
+            let emptyBoxes = gameBoard.gameArray.filter(mark => mark.innerHTML == "");
+            let availBoxes = emptyBoxes[Math.floor(Math.random() * emptyBoxes.length)];
+            if (gameControl() !== 'wins') {
+                if ((randArray[randArray.length-1] == 'X' || randArray[randArray.length-1] == null) && availBoxes.innerText !== 'X') {
+                    availBoxes.innerText = 'O';
+                    randArray.push('O');
+                } else if ((randArray[randArray.length-1] == 'O' || randArray[randArray.length-1] == null) && availBoxes.innerText !== 'O') {
+                    availBoxes.innerText = 'X';
+                    randArray.push('X');
                 }
             }
             gameControl();
@@ -112,6 +136,7 @@ let render = function() {   //call this function in modelDOM function.
             document.getElementById("winner").innerHTML = "";
         })
     })
+
 }
 
 let modelDOM = function() {
@@ -134,7 +159,7 @@ let gameControl = function() {
     //Win Conditions:
     //player 1 criteria
     if (gameBoard.gameArray[0].innerHTML == 'X' && gameBoard.gameArray[1].innerHTML == 'X' && gameBoard.gameArray[2].innerHTML == 'X') {
-        sayWinner = "Player1";
+        sayWinner = "Player1"
         gameWin.winGame(sayWinner);
         //modal.style.display = 'block';
         return "wins";
